@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import com.google.gson.JsonObject;
 
 import WebProject.Business.BusinessBase;
+import WebProject.DataObject.ParameterCollection;
 import WebProject.DataObject.User;
 
 @WebServlet("/ServletBase")
@@ -19,6 +20,7 @@ public class ServletBase extends HttpServlet {
 	protected HttpServletRequest request;
 	protected HttpServletResponse response;
 	protected HttpSession session;
+	protected BusinessBase business;
 	protected User currentUser;
 	protected JsonObject jsonReturn = null;
 	protected String returnMessage = null;
@@ -32,7 +34,7 @@ public class ServletBase extends HttpServlet {
 		this.request = request;
 		this.response = response; 
 		session = request.getSession();
-		SetUserParams();
+		business = new BusinessBase();
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -51,7 +53,7 @@ public class ServletBase extends HttpServlet {
 		}
 	}
 	
-	private void SetUserParams()
+	protected void SetUserParams()
 	{
 		currentUser = new User();
 		currentUser.setUsername(GetRequestParameter("Username"));
@@ -59,6 +61,16 @@ public class ServletBase extends HttpServlet {
 		if(password!=null)
 			password = new BusinessBase().encrypt(password);
 		currentUser.setPassword(password);
+	}
+	
+	protected boolean CheckUser()
+	{
+		stateResponse = true;
+		ParameterCollection params = new ParameterCollection();
+		params.Add("userId", "1");
+		params.Add("username", "pippo");
+		returnMessage = business.CreateJSONObject(params);
+		return true;
 	}
 	
 	protected void addJsonBoolean(String name,boolean value)

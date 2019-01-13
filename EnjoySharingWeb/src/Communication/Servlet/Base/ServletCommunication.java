@@ -29,6 +29,10 @@ public class ServletCommunication extends ServletBase {
 		this.request = request;
 		this.response = response; 
 		session = request.getSession();
+		// TODO
+		// Introdurre logica per login e check
+		SetUserParams();
+		CheckUser();
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
