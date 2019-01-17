@@ -81,15 +81,13 @@ public class BusinessBase {
 	
 	public String CreateJSONObject(ParameterCollection params)
 	{
-		Parameter param;
 		JsonArray retArray = new JsonArray();
 		JsonObject rowObject;
 		try
 		{
 			rowObject = new JsonObject();
-			for(int i=0;i<params.size();i++)
+			for(Parameter param : params.InputParameterList)
 			{
-				param = (Parameter) params.Get(i);
 				rowObject.addProperty(param.Name, (String) param.GetValue());
 			}
 			retArray.add(rowObject);

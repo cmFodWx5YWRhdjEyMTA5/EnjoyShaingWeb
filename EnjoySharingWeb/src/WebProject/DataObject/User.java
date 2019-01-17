@@ -3,6 +3,7 @@ package WebProject.DataObject;
 public class User {
 	private int userId;
 	private String username;
+	private String email;
 	private String password;
 	private int roleId;
 	private boolean isAdmin;
@@ -23,6 +24,14 @@ public class User {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getPassword() {
@@ -49,14 +58,14 @@ public class User {
 		this.isAdmin = isAdmin == (byte)1;
 	}
 	
-	public boolean CheckUser(String username, String password) // la password mi arriva già criptata
+	public boolean CheckUser(String email, String password)
 	{
-		return username.equals(getUsername()) && password.equals(getPassword());
+		return email.equals(getEmail()) && password.equals(getPassword());
 	}
 	
 	public boolean UserIsEmpty()
 	{
-		return getUsername() == null || getUsername().equals("") || getPassword() == null || getPassword().equals("");
+		return getEmail() == null || getEmail().equals("") || getPassword() == null || getPassword().equals("");
 	}
 
 }

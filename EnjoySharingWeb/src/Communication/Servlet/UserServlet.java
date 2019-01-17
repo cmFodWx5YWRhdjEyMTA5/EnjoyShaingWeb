@@ -5,7 +5,8 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import Communication.Servlet.Base.ServletCommunication;
+
+import WebProject.DataObject.ParameterCollection;
 
 @WebServlet("/UserServlet")
 public class UserServlet extends ServletCommunication {
@@ -16,15 +17,25 @@ public class UserServlet extends ServletCommunication {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		super.doGet(request, response);
-		// TODO
-		// Introdurre logica per login e check
+		try
+		{
+			super.doGet(request, response);
+			// TODO
+			// Introdurre logica per login e check
+			ParameterCollection params = new ParameterCollection();
+			params.Add("userId", "1");
+			params.Add("username", "pippo");
+			PrepareJSON(true, params);
+		}
+		catch(Exception e)
+		{
+			PrepareJSON(false, null);
+		}
 		ReturnJson();
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		super.doPost(request, response);
 	}
 
 }

@@ -1,10 +1,12 @@
-package Communication.Servlet.Base;
+package Communication.Servlet;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import WebProject.DataObject.ParameterCollection;
 import WebProject.Servlet.ServletBase;
 
 /*
@@ -26,19 +28,25 @@ public class ServletCommunication extends ServletBase {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		this.request = request;
-		this.response = response; 
-		session = request.getSession();
+		super.doGet(request, response);
 		// TODO
 		// Introdurre logica per login e check
 		SetUserParams();
-		CheckUser();
+		if(!CheckUser()) throw new ServletException();
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		super.doPost(request, response);
 		// TODO
-		// C'è da verificare tramite app se sono necessarie chiamate POST...per ora userò le GET!
-		doGet(request, response);
+		// Introdurre logica per login e check
+		SetUserParams();
+		if(!CheckUser()) throw new ServletException();
+	}
+	
+	protected void PrepareJSON(boolean state, ParameterCollection params)
+	{
+		stateResponse = state;
+		returnMessage = business.CreateJSONObject(params);
 	}
 
 }
