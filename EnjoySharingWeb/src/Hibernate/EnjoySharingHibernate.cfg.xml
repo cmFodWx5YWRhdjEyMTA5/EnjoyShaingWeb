@@ -4,10 +4,11 @@
 		"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
+    	<property name="hibernate.bytecode.use_reflection_optimizer">false</property>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.password">password</property>
-        <property name="hibernate.connection.url">jdbc:mysql://&lt;host&gt;&lt;:port&gt;/&lt;database&gt;</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/enjoysharingdb?autoReconnection=true</property>
         <property name="hibernate.connection.username">username</property>
+        <property name="hibernate.connection.password">password</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
     </session-factory>
 </hibernate-configuration>
