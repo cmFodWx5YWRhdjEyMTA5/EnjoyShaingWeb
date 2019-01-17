@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 17-gen-2019 21.26.41 by Hibernate Tools 5.2.3.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class catalog="enjoysharingdb" dynamic-insert="false" dynamic-update="false" mutable="true" name="Hibernate.Tables.Event" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="event">
+        <id name="eventId" type="java.lang.Long">
+            <column name="EventId"/>
+            <generator class="identity"/>
+        </id>
+        <property generated="never" lazy="false" name="title" optimistic-lock="true" type="string" unique="false">
+            <column length="50" name="Title" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="userId" optimistic-lock="true" type="java.lang.Long" unique="false">
+            <column name="UserId"/>
+        </property>
+        <property generated="never" lazy="false" name="description" optimistic-lock="true" type="string" unique="false">
+            <column length="100" name="Description" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="maxRequests" optimistic-lock="true" type="int" unique="false">
+            <column name="MaxRequests" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="genderEventId" optimistic-lock="true" type="java.lang.Long" unique="false">
+            <column name="GenderEventId"/>
+        </property>
+        <property generated="never" lazy="false" name="dateEvent" optimistic-lock="true" type="timestamp" unique="false">
+            <column length="0" name="DateEvent" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="activeFlg" optimistic-lock="true" type="byte" unique="false">
+            <column name="ActiveFlg" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="insertDate" optimistic-lock="true" type="timestamp" unique="false">
+            <column length="0" name="InsertDate" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="insertUser" optimistic-lock="true" type="string" unique="false">
+            <column length="200" name="InsertUser" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="updateDate" optimistic-lock="true" type="timestamp" unique="false">
+            <column length="0" name="UpdateDate" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="updateUser" optimistic-lock="true" type="string" unique="false">
+            <column length="200" name="UpdateUser" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>

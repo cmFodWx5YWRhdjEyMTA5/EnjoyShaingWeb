@@ -10,5 +10,12 @@
         <property name="hibernate.connection.username">username</property>
         <property name="hibernate.connection.password">password</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        
+        <mapping resource="Hibernate/Tables/GenderEvent.hbm.xml" />
+        <mapping resource="Hibernate/Tables/RequestStatus.hbm.xml" />
+        <mapping resource="Hibernate/Tables/User.hbm.xml" />
+        <mapping resource="Hibernate/Tables/Usertofriend.hbm.xml" />
+        <mapping resource="Hibernate/Tables/Event.hbm.xml" />
+        <mapping resource="Hibernate/Tables/Request.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

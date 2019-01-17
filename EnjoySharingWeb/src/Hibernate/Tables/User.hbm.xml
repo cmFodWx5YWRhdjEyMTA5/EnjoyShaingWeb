@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 17-gen-2019 21.26.41 by Hibernate Tools 5.2.3.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class catalog="enjoysharingdb" dynamic-insert="false" dynamic-update="false" mutable="true" name="Hibernate.Tables.User" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="user">
+        <id name="userId" type="java.lang.Long">
+            <column name="UserId"/>
+            <generator class="identity"/>
+        </id>
+        <property generated="never" lazy="false" name="name" optimistic-lock="true" type="string" unique="false">
+            <column length="100" name="Name" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="surname" optimistic-lock="true" type="string" unique="false">
+            <column length="100" name="Surname" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="userName" optimistic-lock="true" type="string" unique="false">
+            <column length="201" name="UserName"/>
+        </property>
+        <property generated="never" lazy="false" name="email" optimistic-lock="true" type="string" unique="false">
+            <column length="100" name="Email" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="password" optimistic-lock="true" type="string" unique="false">
+            <column length="100" name="Password" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="address" optimistic-lock="true" type="string" unique="false">
+            <column length="100" name="Address" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="cap" optimistic-lock="true" type="java.lang.Integer" unique="false">
+            <column name="CAP"/>
+        </property>
+        <property generated="never" lazy="false" name="activeFlg" optimistic-lock="true" type="java.lang.Byte" unique="false">
+            <column name="ActiveFlg"/>
+        </property>
+        <property generated="never" lazy="false" name="insertDate" optimistic-lock="true" type="timestamp" unique="false">
+            <column length="0" name="InsertDate"/>
+        </property>
+        <property generated="never" lazy="false" name="insertUser" optimistic-lock="true" type="string" unique="false">
+            <column length="200" name="InsertUser" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="updateDate" optimistic-lock="true" type="timestamp" unique="false">
+            <column length="0" name="UpdateDate"/>
+        </property>
+        <property generated="never" lazy="false" name="updateUser" optimistic-lock="true" type="string" unique="false">
+            <column length="200" name="UpdateUser" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>
