@@ -1,7 +1,7 @@
 package WebProject.DataObject;
 
 public class User {
-	private int userId;
+	private Long userId;
 	private String username;
 	private String email;
 	private String password;
@@ -10,11 +10,11 @@ public class User {
 
 	public User() { }
 
-	public int getUserId() {
+	public Long getUserId() {
 		return this.userId;
 	}
 
-	public void setUserId(int userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

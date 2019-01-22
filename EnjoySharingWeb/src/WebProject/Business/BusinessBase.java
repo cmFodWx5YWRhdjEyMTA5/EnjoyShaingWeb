@@ -46,8 +46,6 @@ public class BusinessBase {
 	    return ret;
 	}
 	
-
-	
 	public String ListToJson(List<?> list)
 	{
 		Field[] fields;
@@ -77,8 +75,6 @@ public class BusinessBase {
 		return retArray.toString();
 	}
 	
-
-	
 	public String CreateJSONObject(ParameterCollection params)
 	{
 		JsonArray retArray = new JsonArray();
@@ -98,5 +94,4 @@ public class BusinessBase {
 		}
 		return retArray.toString();
 	}
-
 }

@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import WebProject.Custom.AuthenticationException;
 import WebProject.DataObject.ParameterCollection;
 import WebProject.Servlet.ServletBase;
 
@@ -29,24 +30,38 @@ public class ServletCommunication extends ServletBase {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		super.doGet(request, response);
-		// TODO
-		// Introdurre logica per login e check
 		SetUserParams();
-		if(!CheckUser()) throw new ServletException();
+		try 
+		{
+			if(!CheckUser()) throw new AuthenticationException();
+		} 
+		catch (AuthenticationException e)
+		{
+			throw new ServletException(); 
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		super.doPost(request, response);
-		// TODO
-		// Introdurre logica per login e check
 		SetUserParams();
-		if(!CheckUser()) throw new ServletException();
+		try 
+		{
+			if(!CheckUser()) throw new AuthenticationException();
+		} 
+		catch (AuthenticationException e)
+		{ }
 	}
 	
 	protected void PrepareJSON(boolean state, ParameterCollection params)
 	{
 		stateResponse = state;
 		returnMessage = business.CreateJSONObject(params);
+	}
+	
+	protected void PrepareErrorJSON()
+	{
+		stateResponse = false;
+		returnMessage = ErrorMessage;
 	}
 
 }

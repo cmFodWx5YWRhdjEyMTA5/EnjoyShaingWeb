@@ -2,7 +2,7 @@
 <!-- Generated 17-gen-2019 21.26.41 by Hibernate Tools 5.2.3.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
     <class catalog="enjoysharingdb" dynamic-insert="false" dynamic-update="false" mutable="true" name="Hibernate.Tables.Usertofriend" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="usertofriend">
-        <composite-id class="UsertofriendId" mapped="false" name="id" unsaved-value="undefined">
+        <composite-id class="Hibernate.Tables.UsertofriendId" mapped="false" name="id" unsaved-value="undefined">
             <key-property name="userIdSender" type="long">
                 <column name="UserIdSender"/>
             </key-property>

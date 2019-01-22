@@ -1,6 +1,8 @@
 package WebProject.Servlet;
 
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,7 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.google.gson.JsonObject;
+
+import Hibernate.HibernateOperation;
 import WebProject.Business.BusinessBase;
+import WebProject.DataObject.ParameterCollection;
 import WebProject.DataObject.User;
 
 @WebServlet("/ServletBase")
@@ -22,6 +27,7 @@ public class ServletBase extends HttpServlet {
 	protected JsonObject jsonReturn = null;
 	protected String returnMessage = null;
 	protected boolean stateResponse = true;
+	protected String ErrorMessage = null;
        
     public ServletBase() {
         super();
@@ -60,9 +66,36 @@ public class ServletBase extends HttpServlet {
 		currentUser.setPassword(password);
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected boolean CheckUser()
 	{
-		return true;
+		boolean usernameFound = false;
+		ErrorMessage = null;
+		ParameterCollection whereParams = new ParameterCollection();
+		whereParams.Add("email", currentUser.getEmail());
+		List<Hibernate.Tables.User> listUser = (List<Hibernate.Tables.User>) new HibernateOperation().GetTableData("User",whereParams);
+		if(listUser != null)
+		{
+			List<Hibernate.Tables.User> listUserPassword;
+			for(Hibernate.Tables.User U : listUser)
+			{
+				usernameFound = true;
+				// non posso controllare qui la password perchè ci sono caratteri speciali, quindi eseguo la query sulla tabella mettendo la password in input
+				whereParams = new ParameterCollection();
+				whereParams.Add("email", U.getEmail());
+				whereParams.Add("password", currentUser.getPassword());
+				listUserPassword = (List<Hibernate.Tables.User>) new HibernateOperation().GetTableData("User",whereParams);
+				if(listUserPassword != null && !listUserPassword.isEmpty())
+				{
+					currentUser.setUserId(U.getUserId());
+					currentUser.setUsername(U.getUserName());
+					return true;
+				}
+			}
+		}
+		if(!usernameFound)  // User non trovato -> non registrato
+			ErrorMessage = "UserNotRegister";
+		return false;
 	}
 	
 	protected void addJsonBoolean(String name,boolean value)
