@@ -1,34 +1,26 @@
-package Communication.Servlet;
+package WebProject.Servlet;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import WebProject.DataObject.ParameterCollection;
 
-@WebServlet("/UserServlet")
-public class UserServlet extends ServletCommunication {
+import WebProject.DataObject.DataTable;
+
+@WebServlet("/ServletWeb")
+public class ServletWeb extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    public UserServlet() {
+	
+	protected DataTable dataTable = null;
+
+    public ServletWeb() {
         super();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		try
-		{
-			super.doGet(request, response);
-			ParameterCollection params = new ParameterCollection();
-			params.Add("UserId", currentUser.getUserId());
-			params.Add("UserName", currentUser.getUsername());
-			PrepareJSON(true, params);
-		}
-		catch(Exception e)
-		{
-			PrepareErrorJSON();
-		}
-		ReturnJson();
+		super.doGet(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

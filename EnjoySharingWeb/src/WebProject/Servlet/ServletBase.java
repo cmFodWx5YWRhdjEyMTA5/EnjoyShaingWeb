@@ -2,7 +2,6 @@ package WebProject.Servlet;
 
 import java.io.IOException;
 import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.google.gson.JsonObject;
-
 import Hibernate.HibernateOperation;
 import WebProject.Business.BusinessBase;
 import WebProject.DataObject.ParameterCollection;
@@ -95,7 +93,15 @@ public class ServletBase extends HttpServlet {
 		}
 		if(!usernameFound)  // User non trovato -> non registrato
 			ErrorMessage = "UserNotRegister";
+		else  // Email o Password errata
+			ErrorMessage = "UserWrong";
 		return false;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	protected List<?> ExecuteSP(String storedName, ParameterCollection params,Class resultClass)
+	{
+		return new HibernateOperation().ExecuteSPQuery(storedName,params,resultClass);
 	}
 	
 	protected void addJsonBoolean(String name,boolean value)

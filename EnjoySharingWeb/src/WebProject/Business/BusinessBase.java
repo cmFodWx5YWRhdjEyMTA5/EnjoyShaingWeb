@@ -4,9 +4,10 @@ import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
+import WebProject.DataObject.DataTable;
 import WebProject.DataObject.Parameter;
 import WebProject.DataObject.ParameterCollection;
 
@@ -84,7 +85,7 @@ public class BusinessBase {
 			rowObject = new JsonObject();
 			for(Parameter param : params.InputParameterList)
 			{
-				rowObject.addProperty(param.Name, (String) param.GetValue());
+				rowObject.addProperty(param.Name, param.GetValue().toString());
 			}
 			retArray.add(rowObject);
 		}
@@ -92,6 +93,51 @@ public class BusinessBase {
 		{
 			return null;
 		}
+		return retArray.toString();
+	}
+	
+	public String CreateJSONObject(DataTable dataTable)
+	{
+		Object[] row;
+		JsonArray retArray = new JsonArray();
+		JsonObject rowObject;
+		try
+		{
+			for(int i=0;i<dataTable.GetRowCount();i++)
+			{
+				rowObject = new JsonObject();
+				row = dataTable.GetRow(i);
+				for (int j=0;j<dataTable.GetColumns().length;j++) {
+					String columnName = dataTable.GetColumns()[j];
+					rowObject.addProperty(columnName, row[j] == null ? "" : row[j].toString());
+			    }
+				retArray.add(rowObject);
+			}
+		}
+		catch(Exception e)
+		{ }
+		return retArray.toString();
+	}
+
+	public String CreateJSONObject(Hibernate.DataObjectClass.DataTable dataTable) {
+		Object[] row;
+		JsonArray retArray = new JsonArray();
+		JsonObject rowObject;
+		try
+		{
+			for(int i=0;i<dataTable.GetRowCount();i++)
+			{
+				rowObject = new JsonObject();
+				row = dataTable.GetRow(i);
+				for (int j=0;j<dataTable.GetColumns().length;j++) {
+					String columnName = dataTable.GetColumns()[j];
+					rowObject.addProperty(columnName, row[j] == null ? "" : row[j].toString());
+			    }
+				retArray.add(rowObject);
+			}
+		}
+		catch(Exception e)
+		{ }
 		return retArray.toString();
 	}
 }

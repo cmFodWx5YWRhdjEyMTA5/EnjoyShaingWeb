@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.transform.Transformers;
 
 import WebProject.DataObject.Parameter;
 import WebProject.DataObject.ParameterCollection;
@@ -77,6 +78,53 @@ public class HibernateOperation {
 				session.getTransaction().commit();
 		}
 		return retList;
+	}
+	
+	@SuppressWarnings({ "rawtypes" })
+	public List<?> ExecuteSPQuery(String storedName,ParameterCollection params,Class resultClass)
+	{
+		List<?> retList = null;
+		try
+		{
+			session.beginTransaction();
+			Query q = session.createSQLQuery(CreateSPString(storedName,params));
+			//System.out.println("BaseDBOperations.ExecuteQuery query "+query);
+			for(Parameter param : params.InputParameterList)
+			{
+				//System.out.println("BaseDBOperations.ExecuteQuery parametro "+param.Name+" = "+param.Value+" "+param.Type);
+				if(param.Value instanceof List)
+				{
+					q.setParameterList(param.Name, (Collection) param.Value);
+				}
+				else
+				{
+					q.setParameter(param.Name, param.Value);
+				}
+			}
+			retList = q.setResultTransformer(Transformers.aliasToBean(resultClass)).list();
+			session.flush();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Errore chiamata stored "+storedName);
+			e.printStackTrace();
+		}
+		finally
+		{
+			if(!session.getTransaction().wasCommitted())
+				session.getTransaction().commit();
+		}
+		return retList;
+	}
+	
+	protected String CreateSPString(String storedName,ParameterCollection params)
+	{
+		String ret = "{call "+storedName+"(";
+		for(Parameter param : params.InputParameterList)
+		{
+			ret += ":"+param.Name+",";
+		}
+		return ret.substring(0, ret.lastIndexOf(','))+")}";
 	}
 	
 	public List<?> GetTableData(String tableName)

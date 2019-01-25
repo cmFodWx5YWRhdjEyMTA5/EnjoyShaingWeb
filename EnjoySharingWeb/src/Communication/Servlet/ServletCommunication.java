@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Hibernate.DataObjectClass.DataTable;
 import WebProject.Custom.AuthenticationException;
 import WebProject.DataObject.ParameterCollection;
 import WebProject.Servlet.ServletBase;
@@ -23,6 +24,8 @@ import WebProject.Servlet.ServletBase;
 @WebServlet("/ServletCommunication")
 public class ServletCommunication extends ServletBase {
 	private static final long serialVersionUID = 1L;
+	
+	protected DataTable dataTable = null;
        
     public ServletCommunication() {
         super();
@@ -56,6 +59,12 @@ public class ServletCommunication extends ServletBase {
 	{
 		stateResponse = state;
 		returnMessage = business.CreateJSONObject(params);
+	}
+	
+	protected void PrepareJSON()
+	{
+		stateResponse = true;
+		returnMessage = business.CreateJSONObject(dataTable);
 	}
 	
 	protected void PrepareErrorJSON()
