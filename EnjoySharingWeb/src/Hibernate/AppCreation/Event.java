@@ -1,4 +1,4 @@
-package Hibernate.Tables;
+package Hibernate.AppCreation;
 
 import java.util.Date;
 

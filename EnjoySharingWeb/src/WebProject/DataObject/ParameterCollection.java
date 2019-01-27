@@ -62,7 +62,7 @@ public class ParameterCollection {
 	{
 		boolean IsContain = false;
 		for(Parameter param : InputParameterList)
-			if(param.Name.equals(Name))
+			if(param.Name.toUpperCase().equals(Name.toUpperCase()))  // Ignoro il CaseSensitive per Update se no viene un casino!
 				IsContain=true;
 		return IsContain;
 	}
@@ -76,7 +76,7 @@ public class ParameterCollection {
 	public Object Get(String Name)
 	{
 		for(Parameter param : InputParameterList)
-			if(param.Name.equals(Name))
+			if(param.Name.toUpperCase().equals(Name.toUpperCase()))  // Ignoro il case sensitive se no è un casino per l'Update!
 				return param.GetValue();
 		return null;
 	}

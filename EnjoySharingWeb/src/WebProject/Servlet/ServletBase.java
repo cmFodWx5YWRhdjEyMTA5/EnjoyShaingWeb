@@ -39,7 +39,10 @@ public class ServletBase extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
+    	this.request = request;
+		this.response = response; 
+		session = request.getSession();
+		business = new BusinessBase();
 	}
 	
 	public String GetRequestParameter(String pName)

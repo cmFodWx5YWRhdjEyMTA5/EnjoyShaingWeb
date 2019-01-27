@@ -5,10 +5,10 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import Hibernate.DataObjectClass.DataTable;
 import WebProject.Custom.AuthenticationException;
 import WebProject.DataObject.ParameterCollection;
+import WebProject.DataObject.User;
 import WebProject.Servlet.ServletBase;
 
 /*
@@ -54,6 +54,17 @@ public class ServletCommunication extends ServletBase {
 		catch (AuthenticationException e)
 		{ }
 	}
+	@Override
+	protected void SetUserParams()
+	{
+		currentUser = new User();
+		currentUser.setEmail(GetRequestParameter("Email"));
+		String password = GetRequestParameter("Password");
+		// La password arriva già criptata!
+//		if(password!=null)
+//			password = new BusinessBase().encrypt(password);
+		currentUser.setPassword(password);
+	}
 	
 	protected void PrepareJSON(boolean state, ParameterCollection params)
 	{
@@ -65,6 +76,12 @@ public class ServletCommunication extends ServletBase {
 	{
 		stateResponse = true;
 		returnMessage = business.CreateJSONObject(dataTable);
+	}
+	// Typically used on PostRequests
+	protected void PrepareJSON(String message)
+	{
+		stateResponse = true;
+		returnMessage = message;
 	}
 	
 	protected void PrepareErrorJSON()

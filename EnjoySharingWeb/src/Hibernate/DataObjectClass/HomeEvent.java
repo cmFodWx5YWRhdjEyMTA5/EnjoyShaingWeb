@@ -5,7 +5,6 @@ import java.util.Date;
 public class HomeEvent {
 
 	public String CardType;
-	public java.math.BigInteger CardId;
 	public java.math.BigInteger EventId;
 	public java.math.BigInteger UserId;
 	public String UserName;

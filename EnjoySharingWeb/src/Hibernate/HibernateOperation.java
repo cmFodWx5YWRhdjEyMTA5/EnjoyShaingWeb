@@ -98,7 +98,14 @@ public class HibernateOperation {
 				}
 				else
 				{
-					q.setParameter(param.Name, param.Value);
+					try
+					{
+						q.setParameter(param.Name, param.Value.toString().equals("")?null:param.GetValue());
+					}
+					catch(Exception e)
+					{
+						q.setParameter(param.Name, null);
+					}
 				}
 			}
 			retList = q.setResultTransformer(Transformers.aliasToBean(resultClass)).list();

@@ -1,14 +1,17 @@
 package Communication.Servlet;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Hibernate.HibernateOperation;
 import Hibernate.DataObjectClass.DataTable;
 import Hibernate.DataObjectClass.HomeEvent;
+import Hibernate.Tables.Event;
 import WebProject.DataObject.ParameterCollection;
 
 @WebServlet("/EventServlet")
@@ -25,10 +28,19 @@ public class EventServlet extends ServletCommunication {
 			super.doGet(request, response);
 			String requestType = GetRequestParameter("RequestType");
 			ParameterCollection params = new ParameterCollection();
-			params.Add("userId", currentUser.getUserId());
+			params.Add("UserId", currentUser.getUserId());
 			switch(requestType)
 			{
 				case "H":
+					params.Add("Title", null);
+					params.Add("MaxRequest", null);
+					params.Add("GenderEventId", null);
+					LoadHomeEvent(params);
+					break;
+				case "S":
+					params.Add("Title", GetRequestParameter("Title"));
+					params.Add("MaxRequest", GetRequestParameter("MaxRequest"));
+					params.Add("GenderEventId", GetRequestParameter("GenderEventId"));
 					LoadHomeEvent(params);
 					break;
 				case "M":
@@ -48,7 +60,42 @@ public class EventServlet extends ServletCommunication {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		super.doPost(request, response);
+		try
+		{
+			super.doPost(request, response);
+			String message=null;
+			String requestType = GetRequestParameter("RequestType");
+			ParameterCollection params = new ParameterCollection();
+			params.Add("EventId", GetRequestParameter("EventId"));
+			params.Add("Title", GetRequestParameter("Title"));
+			params.Add("UserId", currentUser.getUserId());
+			params.Add("Content", GetRequestParameter("Content"));
+			params.Add("MaxRequest", GetRequestParameter("MaxRequest"));
+			params.Add("GenderEventId", GetRequestParameter("GenderEventId"));
+			params.Add("DateEvent", GetRequestParameter("DateEvent"));
+			switch(requestType)
+			{
+				case "NE":  // New Event
+					ErrorMessage = "NewEventError";
+					NewEvent(params);
+					message = "NewEventInserted";
+					break;
+				case "UE":  // Update Event
+					ErrorMessage = "UpdateEventError";
+					UpdateEvent(params);
+					message = "UpdateEventInserted";
+					break;
+				default:
+					ErrorMessage = "WrongRequest";
+					throw new Exception();
+			}
+			PrepareJSON(message);
+		}
+		catch(Exception e)
+		{
+			PrepareErrorJSON();
+		}
+		ReturnJson();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -73,6 +120,40 @@ public class EventServlet extends ServletCommunication {
 		}
 		else
 			dataTable = null;
+	}
+	
+	protected void NewEvent(ParameterCollection params)
+	{
+		String Title = params.Get("Title").toString();
+		Long UserId = (Long) params.Get("UserId");
+		String Content = params.Get("Content").toString();
+		int MaxRequest = Integer.parseInt(params.Get("MaxRequest").toString());
+		Long GenderEventId = Long.parseLong(params.Get("GenderEventId").toString());
+		Date DateEvent = business.GetDate(params.Get("DateEvent").toString());
+		Event e = new Event(Title, UserId, Content, MaxRequest, GenderEventId, DateEvent,
+				(byte) 1, business.GetNow(), currentUser.getUserId(), business.GetNow(), currentUser.getUserId());
+		new HibernateOperation().Save(e);
+	}
+	
+	protected void UpdateEvent(ParameterCollection params)
+	{
+		ParameterCollection whereParams = new ParameterCollection();
+		ParameterCollection updateParams = new ParameterCollection();
+		Long EventId = Long.parseLong(params.Get("EventId").toString());
+		String Title = params.Get("Title").toString();
+		String Content = params.Get("Content").toString();
+		int MaxRequest = Integer.parseInt(params.Get("MaxRequest").toString());
+		Long GenderEventId = Long.parseLong(params.Get("GenderEventId").toString());
+		Date DateEvent = business.GetDate(params.Get("DateEvent").toString());
+		whereParams.Add("EventId", EventId);
+		updateParams.Add("Title", Title);
+		updateParams.Add("Content", Content);
+		updateParams.Add("MaxRequest", MaxRequest);
+		updateParams.Add("GenderEventId", GenderEventId);
+		updateParams.Add("DateEvent", DateEvent);
+		updateParams.Add("UpdateDate", business.GetNow());
+		updateParams.Add("UpdateUser", currentUser.getUserId());
+		new HibernateOperation().Update("Event",updateParams,whereParams);
 	}
 
 }
