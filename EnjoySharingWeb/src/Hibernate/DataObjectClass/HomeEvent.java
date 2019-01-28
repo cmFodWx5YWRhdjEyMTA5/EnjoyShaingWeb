@@ -14,9 +14,14 @@ public class HomeEvent {
 	public java.lang.Integer MaxRequest;
 	public java.math.BigInteger GenderEventId;
 	public Date DateEvent;
+	public boolean RequestSubmitted;
 	
 	public void setDateEvent(Date dateEvent) {
 		DateEvent = dateEvent;
+	}
+	
+	public void setRequestSubmitted(java.math.BigInteger RequestSubmitted) {
+		this.RequestSubmitted = RequestSubmitted == java.math.BigInteger.valueOf((long)1);
 	}
 
 }

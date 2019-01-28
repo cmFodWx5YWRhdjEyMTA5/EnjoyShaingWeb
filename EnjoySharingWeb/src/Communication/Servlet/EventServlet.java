@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import Hibernate.HibernateOperation;
 import Hibernate.DataObjectClass.DataTable;
 import Hibernate.DataObjectClass.HomeEvent;
+import Hibernate.DataObjectClass.RequestUser;
 import Hibernate.Tables.Event;
 import WebProject.DataObject.ParameterCollection;
 
@@ -28,23 +29,24 @@ public class EventServlet extends ServletCommunication {
 			super.doGet(request, response);
 			String requestType = GetRequestParameter("RequestType");
 			ParameterCollection params = new ParameterCollection();
-			params.Add("UserId", currentUser.getUserId());
 			switch(requestType)
 			{
-				case "H":
-					params.Add("Title", null);
-					params.Add("MaxRequest", null);
-					params.Add("GenderEventId", null);
-					LoadHomeEvent(params);
-					break;
-				case "S":
+				case "H":  // HOME
+				case "S":  // SEARCH
+					params.Add("UserId", currentUser.getUserId());
 					params.Add("Title", GetRequestParameter("Title"));
 					params.Add("MaxRequest", GetRequestParameter("MaxRequest"));
 					params.Add("GenderEventId", GetRequestParameter("GenderEventId"));
 					LoadHomeEvent(params);
 					break;
-				case "M":
+				case "M":  // MY EVENTS
+					params.Add("UserId", currentUser.getUserId());
 					LoadMyEvent(params);
+					break;
+				case "R":  // REQUEST USERS
+					params.Add("EventId", GetRequestParameter("EventId"));
+					params.Add("UserName", GetRequestParameter("UserName"));
+					LoadRequestUsers(params);
 					break;
 				default:
 					ErrorMessage = "WrongRequest";
@@ -67,12 +69,15 @@ public class EventServlet extends ServletCommunication {
 			String requestType = GetRequestParameter("RequestType");
 			ParameterCollection params = new ParameterCollection();
 			params.Add("EventId", GetRequestParameter("EventId"));
-			params.Add("Title", GetRequestParameter("Title"));
-			params.Add("UserId", currentUser.getUserId());
-			params.Add("Content", GetRequestParameter("Content"));
-			params.Add("MaxRequest", GetRequestParameter("MaxRequest"));
-			params.Add("GenderEventId", GetRequestParameter("GenderEventId"));
-			params.Add("DateEvent", GetRequestParameter("DateEvent"));
+			if(!requestType.equals("R"))
+			{
+				params.Add("Title", GetRequestParameter("Title"));
+				params.Add("UserId", currentUser.getUserId());
+				params.Add("Content", GetRequestParameter("Content"));
+				params.Add("MaxRequest", GetRequestParameter("MaxRequest"));
+				params.Add("GenderEventId", GetRequestParameter("GenderEventId"));
+				params.Add("DateEvent", GetRequestParameter("DateEvent"));
+			}
 			switch(requestType)
 			{
 				case "NE":  // New Event
@@ -83,7 +88,14 @@ public class EventServlet extends ServletCommunication {
 				case "UE":  // Update Event
 					ErrorMessage = "UpdateEventError";
 					UpdateEvent(params);
-					message = "UpdateEventInserted";
+					message = "EventUpdated";
+					break;
+				case "R":  // Update Request Status
+					params.Add("UserId", GetRequestParameter("UserId"));
+					params.Add("Status", GetRequestParameter("Status"));
+					ErrorMessage = "UpdateRequestStatusError";
+					UpdateRequestStatus(params);
+					message = "RequestStatusUpdated";
 					break;
 				default:
 					ErrorMessage = "WrongRequest";
@@ -114,6 +126,18 @@ public class EventServlet extends ServletCommunication {
 	protected void LoadMyEvent(ParameterCollection params)
 	{
 		List<HomeEvent> lstRet = (List<HomeEvent>) ExecuteSP("GetMyEvents",params,HomeEvent.class);
+		if(lstRet != null)
+		{
+			dataTable = new DataTable(lstRet);
+		}
+		else
+			dataTable = null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected void LoadRequestUsers(ParameterCollection params)
+	{
+		List<RequestUser> lstRet = (List<RequestUser>) ExecuteSP("GetRequestList",params,RequestUser.class);
 		if(lstRet != null)
 		{
 			dataTable = new DataTable(lstRet);
@@ -154,6 +178,20 @@ public class EventServlet extends ServletCommunication {
 		updateParams.Add("UpdateDate", business.GetNow());
 		updateParams.Add("UpdateUser", currentUser.getUserId());
 		new HibernateOperation().Update("Event",updateParams,whereParams);
+	}
+	
+	protected void UpdateRequestStatus(ParameterCollection params)
+	{
+		ParameterCollection whereParams = new ParameterCollection();
+		ParameterCollection updateParams = new ParameterCollection();
+		int EventId = Integer.parseInt(params.Get("EventId").toString());
+		Long UserId = Long.parseLong(params.Get("UserId").toString());
+		int RequestStatusId = Integer.parseInt(params.Get("Status").toString());  // 1 = Accepted, 3 = Refused
+		whereParams.Add("eventId", EventId);
+		whereParams.Add("userId", UserId);
+		updateParams.Add("RequestStatusId", RequestStatusId);
+		updateParams.Add("UpdateDate", business.GetNow());
+		new HibernateOperation().UpdateComposite("Request",updateParams,whereParams);
 	}
 
 }

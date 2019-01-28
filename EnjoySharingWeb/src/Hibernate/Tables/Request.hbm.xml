@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Generated 17-gen-2019 21.26.41 by Hibernate Tools 5.2.3.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 28-gen-2019 23.47.58 by Hibernate Tools 5.2.3.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
     <class catalog="enjoysharingdb" dynamic-insert="false" dynamic-update="false" mutable="true" name="Hibernate.Tables.Request" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="request">
         <composite-id class="Hibernate.Tables.RequestId" mapped="false" name="id" unsaved-value="undefined">
@@ -15,6 +15,9 @@
         </property>
         <property generated="never" lazy="false" name="activeFlg" optimistic-lock="true" type="byte" unique="false">
             <column name="ActiveFlg" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="updateDate" optimistic-lock="true" type="timestamp" unique="false">
+            <column length="0" name="UpdateDate" not-null="true"/>
         </property>
     </class>
 </hibernate-mapping>

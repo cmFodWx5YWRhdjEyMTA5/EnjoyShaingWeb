@@ -70,7 +70,8 @@ public class HibernateOperation {
 		}
 		catch(Exception e)
 		{
-			
+			System.out.println("Error on ExecuteQuery\n");
+			e.printStackTrace();
 		}
 		finally
 		{
