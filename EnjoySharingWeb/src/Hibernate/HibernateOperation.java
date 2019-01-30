@@ -175,6 +175,39 @@ public class HibernateOperation {
 		return retList;
 	}
 	
+	public List<?> GetCompositeTableData(String tableName,ParameterCollection whereParams, ParameterCollection whereParamsTable)
+	{
+		List<?> retList;
+		String query = "from "+tableName+" T ";
+		if(whereParams==null || whereParams.InputParameterList.isEmpty())
+		{
+			retList = ExecuteQuery(query);
+		}
+		else
+		{
+			query += GenerateTableIdWhereClauseFromParameters(whereParams);
+			query += GenerateTableWhereCompositeClauseFromParameters(whereParamsTable);
+			ParameterCollection whereParamsAll = whereParams;
+			for(Parameter param : whereParamsTable.InputParameterList)
+				whereParamsAll.Add(param);
+			retList = ExecuteQuery(query,whereParamsAll);
+		}
+		return retList;
+	}
+	
+	private String GenerateTableWhereCompositeClauseFromParameters(ParameterCollection whereParams)
+	{
+		// Con questa funzione costruisco le where clause per la query
+		String ret = "";
+		if(whereParams.InputParameterList.size()==0)
+			return "";
+		for(Parameter param : whereParams.InputParameterList)
+		{
+			ret += " and T."+param.Name +"= :"+param.Name; 
+		}
+		return ret;  // Il substring mi toglie il primo "and "
+	}
+	
 	private String GenerateTableWhereClauseFromParameters(ParameterCollection whereParams)
 	{
 		// Con questa funzione costruisco le where clause per la query
@@ -490,7 +523,43 @@ public class HibernateOperation {
 		}
 		catch(Exception e)
 		{
-			
+			System.out.println("Update Composite Error\n");
+			e.printStackTrace();
+		}
+		finally
+		{
+			if(!session.getTransaction().wasCommitted())
+				session.getTransaction().commit();
+		}
+        return ret;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public boolean UpdateComposite(String tableName, ParameterCollection params, ParameterCollection whereParams, ParameterCollection whereParamsTable)
+	{
+		// Questa funzione estrae una lista di oggetti da updatare ed esegue l'update
+		// E' molto utile specialmente se voglio uploadare più oggetti insieme!
+		boolean ret = false;
+		try
+		{
+			List<Object> list = (List<Object>) GetCompositeTableData(tableName, whereParams, whereParamsTable);
+			if(list != null)
+			{
+				session.beginTransaction();
+				for(Object o : list)
+				{
+					ret = true;
+					o = SetUpdateFieldsFromParameters(o, params);
+					session.update(o);
+					session.flush();
+				}
+			}
+			//System.out.println("BaseDBOperations.Update nessun oggetto da uploadare");
+		}
+		catch(Exception e)
+		{
+			System.out.println("Update Composite Error\n");
+			e.printStackTrace();
 		}
 		finally
 		{

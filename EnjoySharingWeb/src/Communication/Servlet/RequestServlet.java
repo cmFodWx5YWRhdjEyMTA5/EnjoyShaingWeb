@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Hibernate.HibernateOperation;
 import Hibernate.DataObjectClass.DataTable;
+import Hibernate.DataObjectClass.RequestRecieved;
 import Hibernate.DataObjectClass.RequestUser;
 import Hibernate.Tables.Request;
 import Hibernate.Tables.RequestId;
@@ -34,6 +35,10 @@ public class RequestServlet extends ServletCommunication {
 					params.Add("EventId", GetRequestParameter("EventId"));
 					params.Add("UserName", GetRequestParameter("UserName"));
 					LoadRequestUsers(params);
+					break;
+				case "RR":  // REQUEST RECIEVED
+					params.Add("UserId", GetRequestParameter("UserId"));
+					LoadRequestRecieved(params);
 					break;
 				default:
 					ErrorMessage = "WrongRequest";
@@ -64,16 +69,28 @@ public class RequestServlet extends ServletCommunication {
 					NewRequest(params);
 					message = "NewRequestInserted";
 					break;
-				case "DR":  // Delete Request
-					ErrorMessage = "DeleteRequestError";
-					DeleteRequest(params);
-					message = "RequestDeleted";
+				case "DR":  // Deactivate Request
+					ErrorMessage = "DeactivateRequestError";
+					DeactivateRequest(params);
+					message = "RequestDeactivated";
 					break;
 				case "URS":  // Update Request Status
 					params.Add("Status", GetRequestParameter("Status"));
 					ErrorMessage = "UpdateRequestStatusError";
 					UpdateRequestStatus(params);
 					message = "RequestStatusUpdated";
+					break;
+				case "AR":  // Accept All Requests
+					params.Add("EventId", GetRequestParameter("EventId"));
+					ErrorMessage = "AcceptAllError";
+					AcceptRefuseRequests(params,true);
+					message = "AllAccepted";
+					break;
+				case "RR":  // Refuse All Requests
+					params.Add("EventId", GetRequestParameter("EventId"));
+					ErrorMessage = "RefuseAllError";
+					AcceptRefuseRequests(params,false);
+					message = "AllRefused";
 					break;
 				default:
 					ErrorMessage = "WrongRequest";
@@ -100,6 +117,18 @@ public class RequestServlet extends ServletCommunication {
 			dataTable = null;
 	}
 	
+	@SuppressWarnings("unchecked")
+	protected void LoadRequestRecieved(ParameterCollection params)
+	{
+		List<RequestRecieved> lstRet = (List<RequestRecieved>) ExecuteSP("GetRequestRecievedList",params,RequestRecieved.class);
+		if(lstRet != null)
+		{
+			dataTable = new DataTable(lstRet);
+		}
+		else
+			dataTable = null;
+	}
+	
 	protected void NewRequest(ParameterCollection params)
 	{
 		Long UserId = Long.parseLong(params.Get("UserId").toString());
@@ -107,9 +136,34 @@ public class RequestServlet extends ServletCommunication {
 		int RequestStatusId = 2;  // Suspended
 		byte ActiveFlg = (byte)1;
 		Date UpdateDate = business.GetNow();
-		RequestId rId = new RequestId(UserId, EventId);
-		Request r = new Request(rId, RequestStatusId, ActiveFlg, UpdateDate);
-		new HibernateOperation().Save(r);
+		// Prima controllo se esiste e la riattivo...
+		ParameterCollection whereParams = new ParameterCollection();
+		ParameterCollection updateParams = new ParameterCollection();
+		whereParams.Add("eventId", EventId);
+		whereParams.Add("userId", UserId);
+		updateParams.Add("activeFlg", ActiveFlg);
+		updateParams.Add("UpdateDate", business.GetNow());
+		if(!new HibernateOperation().UpdateComposite("Request",updateParams,whereParams))
+		{
+			// Se non esiste la creo ATTIVATA
+			RequestId rId = new RequestId(UserId, EventId);
+			Request r = new Request(rId, RequestStatusId, ActiveFlg, UpdateDate);
+			new HibernateOperation().Save(r);
+		}
+	}
+	
+	protected void DeactivateRequest(ParameterCollection params)
+	{
+		ParameterCollection whereParams = new ParameterCollection();
+		ParameterCollection updateParams = new ParameterCollection();
+		int EventId = Integer.parseInt(params.Get("EventId").toString());
+		Long UserId = Long.parseLong(params.Get("UserId").toString());
+		byte ActiveFlg = (byte)0;
+		whereParams.Add("eventId", EventId);
+		whereParams.Add("userId", UserId);
+		updateParams.Add("activeFlg", ActiveFlg);
+		updateParams.Add("UpdateDate", business.GetNow());
+		new HibernateOperation().UpdateComposite("Request",updateParams,whereParams);
 	}
 	
 	protected void DeleteRequest(ParameterCollection params)
@@ -134,6 +188,20 @@ public class RequestServlet extends ServletCommunication {
 		updateParams.Add("RequestStatusId", RequestStatusId);
 		updateParams.Add("UpdateDate", business.GetNow());
 		new HibernateOperation().UpdateComposite("Request",updateParams,whereParams);
+	}
+	
+	protected void AcceptRefuseRequests(ParameterCollection params, boolean state)
+	{
+		ParameterCollection whereParams = new ParameterCollection();
+		ParameterCollection whereParamsTable = new ParameterCollection();
+		ParameterCollection updateParams = new ParameterCollection();
+		int EventId = Integer.parseInt(params.Get("EventId").toString());
+		int RequestStatusId = state?1:3;  // 1 = Accepted, 3 = Refused
+		whereParams.Add("eventId", EventId);
+		whereParamsTable.Add("requestStatusId", 2);  // 2 = Suspended
+		updateParams.Add("RequestStatusId", RequestStatusId);
+		updateParams.Add("UpdateDate", business.GetNow());
+		new HibernateOperation().UpdateComposite("Request",updateParams,whereParams,whereParamsTable);
 	}
 
 }
