@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import Hibernate.HibernateOperation;
 import Hibernate.DataObjectClass.DataTable;
 import Hibernate.DataObjectClass.RequestRecieved;
+import Hibernate.DataObjectClass.RequestSent;
 import Hibernate.DataObjectClass.RequestUser;
 import Hibernate.Tables.Request;
 import Hibernate.Tables.RequestId;
@@ -39,6 +40,10 @@ public class RequestServlet extends ServletCommunication {
 				case "RR":  // REQUEST RECIEVED
 					params.Add("UserId", GetRequestParameter("UserId"));
 					LoadRequestRecieved(params);
+					break;
+				case "RS":  // REQUEST SENT
+					params.Add("UserId", GetRequestParameter("UserId"));
+					LoadRequestSent(params);
 					break;
 				default:
 					ErrorMessage = "WrongRequest";
@@ -121,6 +126,18 @@ public class RequestServlet extends ServletCommunication {
 	protected void LoadRequestRecieved(ParameterCollection params)
 	{
 		List<RequestRecieved> lstRet = (List<RequestRecieved>) ExecuteSP("GetRequestRecievedList",params,RequestRecieved.class);
+		if(lstRet != null)
+		{
+			dataTable = new DataTable(lstRet);
+		}
+		else
+			dataTable = null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected void LoadRequestSent(ParameterCollection params)
+	{
+		List<RequestSent> lstRet = (List<RequestSent>) ExecuteSP("GetRequestSentList",params,RequestSent.class);
 		if(lstRet != null)
 		{
 			dataTable = new DataTable(lstRet);
