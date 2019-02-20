@@ -90,6 +90,8 @@ public class ServletBase extends HttpServlet {
 				{
 					currentUser.setUserId(U.getUserId());
 					currentUser.setUsername(U.getUserName());
+					currentUser.setName(U.getName());
+					currentUser.setSurname(U.getSurname());
 					return true;
 				}
 			}

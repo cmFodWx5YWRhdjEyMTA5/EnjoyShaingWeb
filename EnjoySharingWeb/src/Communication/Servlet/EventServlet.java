@@ -124,7 +124,7 @@ public class EventServlet extends ServletCommunication {
 		String Content = params.Get("Content").toString();
 		int MaxRequest = Integer.parseInt(params.Get("MaxRequest").toString());
 		Long GenderEventId = Long.parseLong(params.Get("GenderEventId").toString());
-		Date DateEvent = business.GetDate(params.Get("DateEvent").toString());
+		Date DateEvent = business.GetDateFromRequest(params.Get("DateEvent").toString());
 		Event e = new Event(Title, UserId, Content, MaxRequest, GenderEventId, DateEvent,
 				(byte) 1, business.GetNow(), currentUser.getUserId(), business.GetNow(), currentUser.getUserId());
 		new HibernateOperation().Save(e);
@@ -139,7 +139,7 @@ public class EventServlet extends ServletCommunication {
 		String Content = params.Get("Content").toString();
 		int MaxRequest = Integer.parseInt(params.Get("MaxRequest").toString());
 		Long GenderEventId = Long.parseLong(params.Get("GenderEventId").toString());
-		Date DateEvent = business.GetDate(params.Get("DateEvent").toString());
+		Date DateEvent = business.GetDateFromRequest(params.Get("DateEvent").toString());
 		whereParams.Add("EventId", EventId);
 		updateParams.Add("Title", Title);
 		updateParams.Add("Content", Content);

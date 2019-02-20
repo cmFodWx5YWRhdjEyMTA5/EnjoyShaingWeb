@@ -15,11 +15,17 @@ import WebProject.DataObject.ParameterCollection;
 
 public class BusinessBase {
 	
+	public class Constants
+	{
+		public static final String dateFormat = "yyyy-MM-dd HH:mm:ss";
+		public static final String dateFormatFromRequest = "yyyy-MM-dd HH:mm";
+	}
+	
 	public Date GetNow()
 	{
 		try 
 		{
-			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			DateFormat dateFormat = new SimpleDateFormat(Constants.dateFormat);
 			Date date = new Date();
 			return dateFormat.parse(dateFormat.format(date));
 		} 
@@ -30,7 +36,24 @@ public class BusinessBase {
 	
 	public Date GetDate(String str)
 	{
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		SimpleDateFormat formatter = new SimpleDateFormat(Constants.dateFormat);
+        Date date;
+        try 
+        {
+            date = formatter.parse(str);
+            return date;
+        } 
+        catch (Exception e) 
+        {
+        	System.out.println("Date converter error\n");
+        	e.printStackTrace();
+        }
+        return null;
+	}
+	
+	public Date GetDateFromRequest(String str)
+	{
+		SimpleDateFormat formatter = new SimpleDateFormat(Constants.dateFormatFromRequest);
         Date date;
         try 
         {

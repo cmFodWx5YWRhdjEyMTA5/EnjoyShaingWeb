@@ -22,6 +22,8 @@ public class UserServlet extends ServletCommunication {
 			ParameterCollection params = new ParameterCollection();
 			params.Add("UserId", currentUser.getUserId());
 			params.Add("UserName", currentUser.getUsername());
+			params.Add("Name", currentUser.getName());
+			params.Add("Surname", currentUser.getSurname());
 			PrepareJSON(true, params);
 		}
 		catch(Exception e)
