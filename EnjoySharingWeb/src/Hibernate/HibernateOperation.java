@@ -489,7 +489,8 @@ public class HibernateOperation {
 		}
 		catch(Exception e)
 		{
-			
+			System.out.println("Error on update\n");
+			e.printStackTrace();
 		}
 		finally
 		{
