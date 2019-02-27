@@ -20,8 +20,8 @@ public class HomeEvent {
 		DateEvent = dateEvent;
 	}
 	
-	public void setRequestSubmitted(java.math.BigInteger RequestSubmitted) {
-		this.RequestSubmitted = RequestSubmitted == java.math.BigInteger.valueOf((long)1);
+	public void setRequestSubmitted(java.lang.Integer RequestSubmitted) {
+		this.RequestSubmitted = RequestSubmitted == 1;
 	}
 
 }

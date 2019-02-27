@@ -48,8 +48,10 @@ public class UserServlet extends ServletCommunication {
 			{
 				case "UP":  // Update Profile
 					ErrorMessage = "UpdateProfileError";
-					UpdateProfile(params);
-					message = "ProfileUpdated";
+					if(UpdateProfile(params))
+						message = "ProfileUpdated";
+					else
+						throw new Exception();
 					break;
 				default:
 					ErrorMessage = "WrongRequest";
@@ -64,7 +66,7 @@ public class UserServlet extends ServletCommunication {
 		ReturnJson();
 	}
 	
-	protected void UpdateProfile(ParameterCollection params)
+	protected boolean UpdateProfile(ParameterCollection params)
 	{
 		ParameterCollection whereParams = new ParameterCollection();
 		ParameterCollection updateParams = new ParameterCollection();
@@ -77,7 +79,15 @@ public class UserServlet extends ServletCommunication {
 		updateParams.Add("UserName", Surname+" "+Name);
 		updateParams.Add("UpdateDate", business.GetNow());
 		updateParams.Add("UpdateUser", UserId);
-		new HibernateOperation().Update("User",updateParams,whereParams);
+		try
+		{
+			new HibernateOperation().Update("User",updateParams,whereParams);
+			return true;
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
 	}
 
 }
