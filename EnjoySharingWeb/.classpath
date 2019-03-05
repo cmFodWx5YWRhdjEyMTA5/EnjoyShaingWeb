@@ -14,5 +14,6 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/HibernateLibrary"/>
+	<classpathentry kind="lib" path="C:/Users/Marco Arceri/Desktop/JAR_VARI/mail.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

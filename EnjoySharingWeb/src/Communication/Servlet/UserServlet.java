@@ -1,11 +1,14 @@
 package Communication.Servlet;
 
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Hibernate.HibernateOperation;
+import Hibernate.Tables.User;
+import WebProject.Business.BusinessMail;
 import WebProject.DataObject.ParameterCollection;
 
 @WebServlet("/UserServlet")
@@ -41,7 +44,6 @@ public class UserServlet extends ServletCommunication {
 			String message=null;
 			String requestType = GetRequestParameter("RequestType");
 			ParameterCollection params = new ParameterCollection();
-			params.Add("UserId", currentUser.getUserId());
 			params.Add("Name", GetRequestParameter("Name"));
 			params.Add("Surname", GetRequestParameter("Surname"));
 			switch(requestType)
@@ -50,6 +52,15 @@ public class UserServlet extends ServletCommunication {
 					ErrorMessage = "UpdateProfileError";
 					if(UpdateProfile(params))
 						message = "ProfileUpdated";
+					else
+						throw new Exception();
+					break;
+				case "RU":  // Register User
+					params.Add("Email", GetRequestParameter("RegisterEmail"));
+					params.Add("Password", GetRequestParameter("RegisterPassword"));
+					ErrorMessage = "RegisterUserError";
+					if(RegisterUser(params))
+						message = "UserRegistered";
 					else
 						throw new Exception();
 					break;
@@ -86,6 +97,59 @@ public class UserServlet extends ServletCommunication {
 		}
 		catch(Exception e)
 		{
+			return false;
+		}
+	}
+	
+	protected boolean RegisterUser(ParameterCollection params)
+	{
+		if(CheckUserForRegistration(params))
+		{
+			Long UserId = currentUser.getUserId();
+			String Name = params.Get("Name").toString();
+			String Surname = params.Get("Surname").toString();
+			String Email = params.Get("Email").toString();
+			String Password = params.Get("Password").toString();
+			String Username = Surname + " " + Name;
+			try
+			{
+				User u = new User(Name, Surname, Username, Email, Password, "", 0, (byte) 1, business.GetNow(), UserId, business.GetNow(), UserId);
+				if(new BusinessMail().SendMessage(Email, "Complimenti!", "Testo di prova per registrazione effettuata"))
+					new HibernateOperation().Save(u);
+				else
+				{
+					ErrorMessage = "EmailNotValid";
+					return false;
+				}
+				return true;
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				return false;
+			}
+		}
+		else
+		{
+			ErrorMessage = "UserAlreadyRegistered";
+			return false;
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected boolean CheckUserForRegistration(ParameterCollection params)
+	{
+		ParameterCollection whereParams = new ParameterCollection();
+		String Email = params.Get("Email").toString();
+		whereParams.Add("Email", Email);
+		try
+		{
+			List<User> lstUser = (List<User>)new HibernateOperation().GetTableData("User",whereParams);
+			return lstUser.isEmpty();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
 			return false;
 		}
 	}

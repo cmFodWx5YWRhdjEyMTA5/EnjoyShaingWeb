@@ -52,7 +52,9 @@ public class ServletCommunication extends ServletBase {
 			if(!CheckUser()) throw new AuthenticationException();
 		} 
 		catch (AuthenticationException e)
-		{ }
+		{
+			throw new ServletException();
+		}
 	}
 	@Override
 	protected void SetUserParams()
