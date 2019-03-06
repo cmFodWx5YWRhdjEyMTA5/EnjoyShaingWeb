@@ -32,9 +32,8 @@ public class EventServlet extends ServletCommunication {
 				case "H":  // HOME
 				case "S":  // SEARCH
 					params.Add("UserId", currentUser.getUserId());
-					params.Add("Title", GetRequestParameter("Title"));
-					params.Add("MaxRequest", GetRequestParameter("MaxRequest"));
-					params.Add("GenderEventId", GetRequestParameter("GenderEventId"));
+					params.Add("SearchText", GetRequestParameter("SearchText"));
+					params.Add("Index", GetRequestParameter("Index"));
 					LoadHomeEvent(params);
 					break;
 				case "M":  // MY EVENTS
