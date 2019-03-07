@@ -158,6 +158,7 @@ public class RequestServlet extends ServletCommunication {
 		ParameterCollection updateParams = new ParameterCollection();
 		whereParams.Add("eventId", EventId);
 		whereParams.Add("userId", UserId);
+		updateParams.Add("requestStatusId", RequestStatusId);
 		updateParams.Add("activeFlg", ActiveFlg);
 		updateParams.Add("UpdateDate", business.GetNow());
 		if(!new HibernateOperation().UpdateComposite("Request",updateParams,whereParams))
