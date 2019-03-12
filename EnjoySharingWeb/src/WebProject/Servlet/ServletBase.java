@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import com.google.gson.JsonObject;
 import Hibernate.HibernateOperation;
 import WebProject.Business.BusinessBase;
+import WebProject.Business.BusinessDB;
 import WebProject.DataObject.ParameterCollection;
 import WebProject.DataObject.User;
 
@@ -21,6 +22,7 @@ public class ServletBase extends HttpServlet {
 	protected HttpServletResponse response;
 	protected HttpSession session;
 	protected BusinessBase business;
+	protected BusinessDB businessDB;
 	protected User currentUser;
 	protected JsonObject jsonReturn = null;
 	protected String returnMessage = null;
@@ -36,6 +38,7 @@ public class ServletBase extends HttpServlet {
 		this.response = response; 
 		session = request.getSession();
 		business = new BusinessBase();
+		businessDB = new BusinessDB();
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -43,6 +46,7 @@ public class ServletBase extends HttpServlet {
 		this.response = response; 
 		session = request.getSession();
 		business = new BusinessBase();
+		businessDB = new BusinessDB();
 	}
 	
 	public String GetRequestParameter(String pName)

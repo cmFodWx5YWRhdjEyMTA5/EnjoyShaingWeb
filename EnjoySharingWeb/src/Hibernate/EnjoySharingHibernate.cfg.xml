@@ -10,7 +10,9 @@
         <property name="hibernate.connection.username">username</property>
         <property name="hibernate.connection.password">password</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hbm2dll.auto">update</property>
         
+        <mapping resource="Hibernate/Tables/Parameter.hbm.xml" />
         <mapping resource="Hibernate/Tables/Genderevent.hbm.xml" />
         <mapping resource="Hibernate/Tables/Requeststatus.hbm.xml" />
         <mapping resource="Hibernate/Tables/User.hbm.xml" />

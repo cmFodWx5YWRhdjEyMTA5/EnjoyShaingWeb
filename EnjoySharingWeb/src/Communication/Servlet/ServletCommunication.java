@@ -36,7 +36,16 @@ public class ServletCommunication extends ServletBase {
 		SetUserParams();
 		try 
 		{
-			if(!CheckUser()) throw new AuthenticationException();
+			if(!CheckUser())
+			{
+				ErrorMessage = "AuthenticationError";
+				throw new AuthenticationException();
+			}
+			if(!CheckVersion())
+			{
+				ErrorMessage = "VersionError";
+				throw new ServletException();
+			}
 		} 
 		catch (AuthenticationException e)
 		{
@@ -49,7 +58,16 @@ public class ServletCommunication extends ServletBase {
 		SetUserParams();
 		try 
 		{
-			if(!CheckUser()) throw new AuthenticationException();
+			if(!CheckUser())
+			{
+				ErrorMessage = "AuthenticationError";
+				throw new AuthenticationException();
+			}
+			if(!CheckVersion())
+			{
+				ErrorMessage = "VersionError";
+				throw new ServletException();
+			}
 		} 
 		catch (AuthenticationException e)
 		{
@@ -66,6 +84,15 @@ public class ServletCommunication extends ServletBase {
 //		if(password!=null)
 //			password = new BusinessBase().encrypt(password);
 		currentUser.setPassword(password);
+	}
+	
+	protected boolean CheckVersion()
+	{
+		String version = GetRequestParameter("V");
+		String currentVersion = businessDB.GetParameter("CurrentVersion");
+		if(currentVersion != null && !currentVersion.equals(version))
+			return false;
+		return true;
 	}
 	
 	protected void PrepareJSON(boolean state, ParameterCollection params)
