@@ -27,17 +27,20 @@ public class EventServlet extends ServletCommunication {
 			super.doGet(request, response);
 			String requestType = GetRequestParameter("RequestType");
 			ParameterCollection params = new ParameterCollection();
+			params.Add("UserId", currentUser.getUserId());
 			switch(requestType)
 			{
 				case "H":  // HOME
-				case "S":  // SEARCH
-					params.Add("UserId", currentUser.getUserId());
-					params.Add("SearchText", GetRequestParameter("SearchText"));
 					params.Add("Index", GetRequestParameter("Index"));
-					LoadHomeEvent(params);
+					LoadHome(params);
+					break;
+				case "S":  // SEARCH
+					params.Add("SearchText", GetRequestParameter("SearchText"));
+					params.Add("IndexUsers", GetRequestParameter("IndexUsers"));
+					params.Add("Index", GetRequestParameter("Index"));
+					LoadSearch(params);
 					break;
 				case "M":  // MY EVENTS
-					params.Add("UserId", currentUser.getUserId());
 					LoadMyEvent(params);
 					break;
 				default:
@@ -93,9 +96,21 @@ public class EventServlet extends ServletCommunication {
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected void LoadHomeEvent(ParameterCollection params)
+	protected void LoadHome(ParameterCollection params)
 	{
-		List<HomeEvent> lstRet = (List<HomeEvent>) ExecuteSP("GetHomeEvents",params,HomeEvent.class);
+		List<HomeEvent> lstRet = (List<HomeEvent>) ExecuteSP("GetHome",params,HomeEvent.class);
+		if(lstRet != null)
+		{
+			dataTable = new DataTable(lstRet);
+		}
+		else
+			dataTable = null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected void LoadSearch(ParameterCollection params)
+	{
+		List<HomeEvent> lstRet = (List<HomeEvent>) ExecuteSP("GetSearch",params,HomeEvent.class);
 		if(lstRet != null)
 		{
 			dataTable = new DataTable(lstRet);

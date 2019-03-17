@@ -150,7 +150,7 @@ public class RequestServlet extends ServletCommunication {
 	{
 		Long UserId = Long.parseLong(params.Get("UserId").toString());
 		int EventId = Integer.parseInt(params.Get("EventId").toString());
-		int RequestStatusId = 2;  // Suspended
+		int RequestStatusId = Integer.parseInt(businessDB.GetParameter("RequestStatusId_Suspended"));  // Suspended
 		byte ActiveFlg = (byte)1;
 		Date UpdateDate = business.GetNow();
 		// Prima controllo se esiste e la riattivo...
@@ -214,9 +214,12 @@ public class RequestServlet extends ServletCommunication {
 		ParameterCollection whereParamsTable = new ParameterCollection();
 		ParameterCollection updateParams = new ParameterCollection();
 		int EventId = Integer.parseInt(params.Get("EventId").toString());
-		int RequestStatusId = state?1:3;  // 1 = Accepted, 3 = Refused
+		int RequestStatusId_Suspended = Integer.parseInt(businessDB.GetParameter("RequestStatusId_Suspended"));  // Suspended
+		int RequestStatusId_Accepted = Integer.parseInt(businessDB.GetParameter("RequestStatusId_Accepted"));  // Accepted
+		int RequestStatusId_Refused = Integer.parseInt(businessDB.GetParameter("RequestStatusId_Refused"));  // Refused
+		int RequestStatusId = state?RequestStatusId_Accepted:RequestStatusId_Refused;  // 1 = Accepted, 3 = Refused
 		whereParams.Add("eventId", EventId);
-		whereParamsTable.Add("requestStatusId", 2);  // 2 = Suspended
+		whereParamsTable.Add("requestStatusId", RequestStatusId_Suspended);  // 2 = Suspended
 		updateParams.Add("RequestStatusId", RequestStatusId);
 		updateParams.Add("UpdateDate", business.GetNow());
 		new HibernateOperation().UpdateComposite("Request",updateParams,whereParams,whereParamsTable);

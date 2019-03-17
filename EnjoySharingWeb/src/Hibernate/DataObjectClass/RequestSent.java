@@ -14,6 +14,7 @@ public class RequestSent {
 	public java.math.BigInteger GenderEventId;
 	public Date DateEvent;
 	public java.lang.Integer RequestStatusId;
+	public String RequestStatus;
 	
 	public void setDateEvent(Date dateEvent) {
 		DateEvent = dateEvent;

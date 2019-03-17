@@ -20,8 +20,17 @@ public class HomeEvent {
 		DateEvent = dateEvent;
 	}
 	
-	public void setRequestSubmitted(java.lang.Integer RequestSubmitted) {
-		this.RequestSubmitted = RequestSubmitted == 1;
+	public void setRequestSubmitted(Object RequestSubmitted) {
+		try
+		{	
+			// Int -> from gethome
+			this.RequestSubmitted = (int)RequestSubmitted == 1;
+		}
+		catch(Exception e)
+		{
+			// Bigint -> from getSearch
+			this.RequestSubmitted = ((java.math.BigInteger)RequestSubmitted).intValue() == 1;
+		}
 	}
 
 }
