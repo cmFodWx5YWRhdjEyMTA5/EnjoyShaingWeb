@@ -26,6 +26,7 @@ public class Parameter {
 	
 	public Object GetValue()
 	{
+		if(Value == null) return null;
 		if(Value.getClass().toString().contains("Ljava.lang.String"))
 			return GetStringValue();
 		return this.Value;

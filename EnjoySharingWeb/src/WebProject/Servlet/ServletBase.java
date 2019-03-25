@@ -1,6 +1,7 @@
 package WebProject.Servlet;
 
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,6 +29,7 @@ public class ServletBase extends HttpServlet {
 	protected String returnMessage = null;
 	protected boolean stateResponse = true;
 	protected String ErrorMessage = null;
+	protected ParameterCollection requestParams;
        
     public ServletBase() {
         super();
@@ -39,6 +41,7 @@ public class ServletBase extends HttpServlet {
 		session = request.getSession();
 		business = new BusinessBase();
 		businessDB = new BusinessDB();
+		LoadRequestParams();
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -47,13 +50,34 @@ public class ServletBase extends HttpServlet {
 		session = request.getSession();
 		business = new BusinessBase();
 		businessDB = new BusinessDB();
+		LoadRequestParams();
+	}
+	
+	protected void LoadRequestParams()
+	{
+		requestParams = new ParameterCollection();
+		
+		Enumeration<String> parameterNames = request.getParameterNames();
+		 
+        while (parameterNames.hasMoreElements()) {
+ 
+            String paramName = parameterNames.nextElement();
+ 
+            String[] paramValues = request.getParameterValues(paramName);
+            for (int i = 0; i < paramValues.length; i++) {
+                String paramValue = paramValues[i];
+                //System.out.println(paramName +":"+paramValue);
+                requestParams.Add(paramName, paramValue);
+            }
+ 
+        }
 	}
 	
 	public String GetRequestParameter(String pName)
 	{
 		try
 		{
-			return request.getParameter(pName);
+			return requestParams.Get(pName).toString();
 		}
 		catch(Exception e)
 		{
@@ -96,6 +120,7 @@ public class ServletBase extends HttpServlet {
 					currentUser.setUsername(U.getUserName());
 					currentUser.setName(U.getName());
 					currentUser.setSurname(U.getSurname());
+					currentUser.setProfilePhotoId(U.getProfilePhotoId());
 					return true;
 				}
 			}

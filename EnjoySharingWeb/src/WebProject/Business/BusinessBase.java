@@ -96,10 +96,39 @@ public class BusinessBase {
 	        }
 	        catch(Exception e) 
 	        {
+	        	e.printStackTrace();
 				return null;
 	        }
 	    }
 	    return ret;
+	}
+	
+	public byte[] StringBase64ToByteArray(String str)
+	{
+		try 
+        {
+			String strBase64 = Base64.getEncoder().encodeToString(str.getBytes());
+			return strBase64.getBytes();
+        }
+        catch(Exception e) 
+        {
+        	e.printStackTrace();
+			return null;
+        }
+	}
+	
+	public String ArrayToBase64(byte[] byteArray)
+	{
+		try 
+        {
+
+			return new String(Base64.getDecoder().decode(new String(byteArray))).replaceAll("\\r|\\n", "").replaceAll(" ", "+");//Base64.getEncoder().encodeToString(byteArray);
+        }
+        catch(Exception e) 
+        {
+        	e.printStackTrace();
+			return null;
+        }
 	}
 	
 	public String ListToJson(List<?> list)
@@ -135,12 +164,14 @@ public class BusinessBase {
 	{
 		JsonArray retArray = new JsonArray();
 		JsonObject rowObject;
+		String value;
 		try
 		{
 			rowObject = new JsonObject();
 			for(Parameter param : params.InputParameterList)
 			{
-				rowObject.addProperty(param.Name, param.GetValue().toString());
+				value = param.GetValue() == null ? "" : param.GetValue().toString();
+				rowObject.addProperty(param.Name, value);
 			}
 			retArray.add(rowObject);
 		}

@@ -15,9 +15,14 @@ public class HomeEvent {
 	public java.math.BigInteger GenderEventId;
 	public Date DateEvent;
 	public boolean RequestSubmitted;
+	public Date LastUpdateProfileImage;
 	
 	public void setDateEvent(Date dateEvent) {
 		DateEvent = dateEvent;
+	}
+	
+	public void setLastUpdateProfileImage(Date lastUpdateProfileImage) {
+		LastUpdateProfileImage = lastUpdateProfileImage;
 	}
 	
 	public void setRequestSubmitted(Object RequestSubmitted) {

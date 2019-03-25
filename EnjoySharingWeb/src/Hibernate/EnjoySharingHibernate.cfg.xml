@@ -15,6 +15,7 @@
         <mapping resource="Hibernate/Tables/Parameter.hbm.xml" />
         <mapping resource="Hibernate/Tables/Genderevent.hbm.xml" />
         <mapping resource="Hibernate/Tables/Requeststatus.hbm.xml" />
+        <mapping resource="Hibernate/Tables/Photo.hbm.xml" />
         <mapping resource="Hibernate/Tables/User.hbm.xml" />
         <mapping resource="Hibernate/Tables/Usertofriend.hbm.xml" />
         <mapping resource="Hibernate/Tables/Event.hbm.xml" />

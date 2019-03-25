@@ -7,6 +7,7 @@ public class User {
 	private String surname;
 	private String email;
 	private String password;
+	private Integer profilePhotoId;
 	private int roleId;
 	private boolean isAdmin;
 
@@ -58,6 +59,14 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public Integer getProfilePhotoId() {
+		return profilePhotoId;
+	}
+
+	public void setProfilePhotoId(Integer profilePhotoId) {
+		this.profilePhotoId = profilePhotoId;
 	}
 
 	public int getRoleId() {

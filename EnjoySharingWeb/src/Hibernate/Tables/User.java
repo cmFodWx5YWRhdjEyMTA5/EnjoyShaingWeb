@@ -18,14 +18,16 @@ public class User implements java.io.Serializable {
 	private long insertUser;
 	private Date updateDate;
 	private long updateUser;
+	private Integer profilePhotoId;
 
 	public User() {
 	}
 
-	public User(String name, String surname, String email, String password, String address, long insertUser,
-			long updateUser) {
+	public User(String name, String surname, String userName, String email, String password, String address,
+			long insertUser, long updateUser) {
 		this.name = name;
 		this.surname = surname;
+		this.userName = userName;
 		this.email = email;
 		this.password = password;
 		this.address = address;
@@ -34,7 +36,8 @@ public class User implements java.io.Serializable {
 	}
 
 	public User(String name, String surname, String userName, String email, String password, String address,
-			Integer cap, Byte activeFlg, Date insertDate, long insertUser, Date updateDate, long updateUser) {
+			Integer cap, Byte activeFlg, Date insertDate, long insertUser, Date updateDate, long updateUser,
+			Integer profilePhotoId) {
 		this.name = name;
 		this.surname = surname;
 		this.userName = userName;
@@ -47,6 +50,7 @@ public class User implements java.io.Serializable {
 		this.insertUser = insertUser;
 		this.updateDate = updateDate;
 		this.updateUser = updateUser;
+		this.profilePhotoId = profilePhotoId;
 	}
 
 	public Long getUserId() {
@@ -151,6 +155,14 @@ public class User implements java.io.Serializable {
 
 	public void setUpdateUser(long updateUser) {
 		this.updateUser = updateUser;
+	}
+
+	public Integer getProfilePhotoId() {
+		return this.profilePhotoId;
+	}
+
+	public void setProfilePhotoId(Integer profilePhotoId) {
+		this.profilePhotoId = profilePhotoId;
 	}
 
 }

@@ -586,7 +586,7 @@ public class HibernateOperation {
 				} 
 				catch (Exception e) 
 				{
-					
+					e.printStackTrace();
 				}
 			}
 		}

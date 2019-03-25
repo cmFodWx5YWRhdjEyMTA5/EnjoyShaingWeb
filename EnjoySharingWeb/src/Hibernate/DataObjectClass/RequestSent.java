@@ -15,9 +15,14 @@ public class RequestSent {
 	public Date DateEvent;
 	public java.lang.Integer RequestStatusId;
 	public String RequestStatus;
+	public Date LastUpdateProfileImage;
 	
 	public void setDateEvent(Date dateEvent) {
 		DateEvent = dateEvent;
+	}
+	
+	public void setLastUpdateProfileImage(Date lastUpdateProfileImage) {
+		LastUpdateProfileImage = lastUpdateProfileImage;
 	}
 
 }
