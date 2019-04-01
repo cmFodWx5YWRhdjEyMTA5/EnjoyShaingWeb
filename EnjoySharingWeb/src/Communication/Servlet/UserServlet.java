@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Hibernate.HibernateOperation;
 import Hibernate.DataObjectClass.DataTable;
-import Hibernate.DataObjectClass.HomeEvent;
 import Hibernate.DataObjectClass.UserFriend;
 import Hibernate.Tables.Photo;
 import Hibernate.Tables.User;
@@ -51,6 +50,7 @@ public class UserServlet extends ServletCommunication {
 					break;
 				case "GF":  // Get Friends
 					params.Add("UserId", currentUser.getUserId());
+					params.Add("UserName", GetRequestParameter("UserName"));
 					ErrorMessage = "GetFriendsError";
 					LoadFriends(params);
 					PrepareJSON();
