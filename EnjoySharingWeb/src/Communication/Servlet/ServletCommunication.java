@@ -84,6 +84,7 @@ public class ServletCommunication extends ServletBase {
 //		if(password!=null)
 //			password = new BusinessBase().encrypt(password);
 		currentUser.setPassword(password);
+		System.out.println("Richiesta di connessione da "+currentUser.getEmail());
 	}
 	
 	protected boolean CheckVersion()

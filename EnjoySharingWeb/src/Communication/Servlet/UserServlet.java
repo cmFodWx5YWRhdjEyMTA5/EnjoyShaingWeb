@@ -8,6 +8,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Hibernate.HibernateOperation;
+import Hibernate.DataObjectClass.DataTable;
+import Hibernate.DataObjectClass.HomeEvent;
+import Hibernate.DataObjectClass.UserFriend;
 import Hibernate.Tables.Photo;
 import Hibernate.Tables.User;
 import WebProject.Business.BusinessMail;
@@ -37,18 +40,25 @@ public class UserServlet extends ServletCommunication {
 					params.Add("Surname", currentUser.getSurname());
 					params.Add("ProfileImage", GetProfileImage(currentUser.getProfilePhotoId()));
 					message = business.CreateJSONObject(params);
+					PrepareJSON(message);
 					break;
 				case "GI":  // Get Image
 					params.Add("UserId", GetRequestParameter("UserIdImage"));
 					ErrorMessage = "GetImageError";
 					params.Add("Photo", GetProfileImage(GetUserImageId(params)));
 					message = business.CreateJSONObject(params);
+					PrepareJSON(message);
+					break;
+				case "GF":  // Get Friends
+					params.Add("UserId", currentUser.getUserId());
+					ErrorMessage = "GetFriendsError";
+					LoadFriends(params);
+					PrepareJSON();
 					break;
 				default:
 					ErrorMessage = "WrongRequest";
 					throw new Exception();
 			}
-			PrepareJSON(message);
 		}
 		catch(Exception e)
 		{
@@ -275,6 +285,18 @@ public class UserServlet extends ServletCommunication {
 		{
 			return false;
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected void LoadFriends(ParameterCollection params)
+	{
+		List<UserFriend> lstRet = (List<UserFriend>) ExecuteSP("GetFriends",params,UserFriend.class);
+		if(lstRet != null)
+		{
+			dataTable = new DataTable(lstRet);
+		}
+		else
+			dataTable = null;
 	}
 
 }
