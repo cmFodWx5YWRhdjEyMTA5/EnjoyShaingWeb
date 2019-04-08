@@ -155,6 +155,8 @@ public class ServletBase extends HttpServlet {
 		addJsonBoolean("stateResponse",stateResponse);
 		addJsonString("message",returnMessage);
 		response.getWriter().write(jsonReturn.toString());
+//		System.out.println("risposta a "+currentUser.getUsername());
+//		System.out.println(jsonReturn.toString());
 	}
 
 }

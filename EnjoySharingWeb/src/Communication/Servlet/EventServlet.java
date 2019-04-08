@@ -25,7 +25,6 @@ public class EventServlet extends ServletCommunication {
 		try
 		{
 			super.doGet(request, response);
-			String requestType = GetRequestParameter("RequestType");
 			ParameterCollection params = new ParameterCollection();
 			params.Add("UserId", currentUser.getUserId());
 			switch(requestType)
@@ -61,7 +60,6 @@ public class EventServlet extends ServletCommunication {
 		{
 			super.doPost(request, response);
 			String message=null;
-			String requestType = GetRequestParameter("RequestType");
 			ParameterCollection params = new ParameterCollection();
 			params.Add("EventId", GetRequestParameter("EventId"));
 			params.Add("Title", GetRequestParameter("Title"));

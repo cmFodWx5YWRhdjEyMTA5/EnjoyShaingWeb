@@ -28,7 +28,6 @@ public class UserServlet extends ServletCommunication {
 		{
 			super.doGet(request, response);
 			String message=null;
-			String requestType = GetRequestParameter("RequestType");
 			ParameterCollection params = new ParameterCollection();
 			switch(requestType)
 			{
@@ -37,7 +36,7 @@ public class UserServlet extends ServletCommunication {
 					params.Add("UserName", currentUser.getUsername());
 					params.Add("Name", currentUser.getName());
 					params.Add("Surname", currentUser.getSurname());
-					params.Add("ProfileImage", GetProfileImage(currentUser.getProfilePhotoId()));
+					params.Add("LastUpdateDatetimeProfileImage", GetLastUpdateDatetimeProfileImage(currentUser.getProfilePhotoId()));
 					message = business.CreateJSONObject(params);
 					PrepareJSON(message);
 					break;
@@ -72,7 +71,6 @@ public class UserServlet extends ServletCommunication {
 		{
 			super.doPost(request, response);
 			String message=null;
-			String requestType = GetRequestParameter("RequestType");
 			ParameterCollection params = new ParameterCollection();
 			switch(requestType)
 			{
@@ -115,6 +113,22 @@ public class UserServlet extends ServletCommunication {
 			PrepareErrorJSON();
 		}
 		ReturnJson();
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected Date GetLastUpdateDatetimeProfileImage(Integer PhotoId)
+	{
+		ParameterCollection whereParams = new ParameterCollection();
+		whereParams.Add("PhotoId", PhotoId);
+		List<Photo> listPhoto = (List<Photo>) new HibernateOperation().GetTableData("Photo",whereParams);
+		if(listPhoto != null)
+		{
+			for(Photo P : listPhoto)
+			{
+				return P.getUpdateDate();
+			}
+		}
+		return null;
 	}
 	
 	@SuppressWarnings("unchecked")

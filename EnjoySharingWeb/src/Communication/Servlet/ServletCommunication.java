@@ -25,6 +25,7 @@ import WebProject.Servlet.ServletBase;
 public class ServletCommunication extends ServletBase {
 	private static final long serialVersionUID = 1L;
 	
+	protected String requestType = null;
 	protected DataTable dataTable = null;
        
     public ServletCommunication() {
@@ -46,6 +47,9 @@ public class ServletCommunication extends ServletBase {
 				ErrorMessage = "VersionError";
 				throw new ServletException();
 			}
+			requestType = GetRequestParameter("RequestType");
+			System.out.println("Richiesta di GET da "+currentUser.getUsername());
+			System.out.println("RequestType "+requestType);
 		} 
 		catch (AuthenticationException e)
 		{
@@ -68,6 +72,9 @@ public class ServletCommunication extends ServletBase {
 				ErrorMessage = "VersionError";
 				throw new ServletException();
 			}
+			requestType = GetRequestParameter("RequestType");
+			System.out.println("Richiesta di POST da "+currentUser.getUsername());
+			System.out.println("RequestType "+requestType);
 		} 
 		catch (AuthenticationException e)
 		{
@@ -84,7 +91,6 @@ public class ServletCommunication extends ServletBase {
 //		if(password!=null)
 //			password = new BusinessBase().encrypt(password);
 		currentUser.setPassword(password);
-		System.out.println("Richiesta di connessione da "+currentUser.getEmail());
 	}
 	
 	protected boolean CheckVersion()
