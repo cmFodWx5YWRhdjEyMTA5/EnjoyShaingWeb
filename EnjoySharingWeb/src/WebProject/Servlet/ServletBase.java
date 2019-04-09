@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.google.gson.JsonObject;
 import Hibernate.HibernateOperation;
+import Hibernate.DataObjectClass.DataTable;
+import Hibernate.DataObjectClass.StandardResult;
 import WebProject.Business.BusinessBase;
 import WebProject.Business.BusinessDB;
 import WebProject.DataObject.ParameterCollection;
@@ -136,6 +138,20 @@ public class ServletBase extends HttpServlet {
 	protected List<?> ExecuteSP(String storedName, ParameterCollection params,Class resultClass)
 	{
 		return new HibernateOperation().ExecuteSPQuery(storedName,params,resultClass);
+	}
+	
+	protected Object ExecuteSPCheck(String storedName, ParameterCollection params)
+	{
+		List<?> lstRet = new HibernateOperation().ExecuteSPQuery(storedName,params,StandardResult.class);
+		DataTable dt = new DataTable(lstRet);
+		try
+		{
+			return dt.GetCell(0, "ReturnValue");
+		}
+		catch(Exception e)
+		{
+			return null;
+		}
 	}
 	
 	protected void addJsonBoolean(String name,boolean value)

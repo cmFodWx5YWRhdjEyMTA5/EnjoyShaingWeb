@@ -80,14 +80,18 @@ public class RequestServlet extends ServletCommunication {
 				case "URS":  // Update Request Status
 					params.Add("Status", GetRequestParameter("Status"));
 					ErrorMessage = "UpdateRequestStatusError";
-					UpdateRequestStatus(params);
-					message = "RequestStatusUpdated";
+					if(UpdateRequestStatus(params))
+						message = "RequestStatusUpdated";
+					else
+						throw new Exception();
 					break;
 				case "AR":  // Accept All Requests
 					params.Add("EventId", GetRequestParameter("EventId"));
 					ErrorMessage = "AcceptAllError";
-					AcceptRefuseRequests(params,true);
-					message = "AllAccepted";
+					if(AcceptRefuseRequests(params,true))
+						message = "AllAccepted";
+					else
+						throw new Exception();
 					break;
 				case "RR":  // Refuse All Requests
 					params.Add("EventId", GetRequestParameter("EventId"));
@@ -192,22 +196,47 @@ public class RequestServlet extends ServletCommunication {
 		new HibernateOperation().DeleteComposite("Request",whereParams);
 	}
 	
-	protected void UpdateRequestStatus(ParameterCollection params)
+	protected boolean UpdateRequestStatus(ParameterCollection params)
 	{
 		ParameterCollection whereParams = new ParameterCollection();
 		ParameterCollection updateParams = new ParameterCollection();
 		int EventId = Integer.parseInt(params.Get("EventId").toString());
 		Long UserId = Long.parseLong(params.Get("UserId").toString());
 		int RequestStatusId = Integer.parseInt(params.Get("Status").toString());  // 1 = Accepted, 3 = Refused
+		if(RequestStatusId == 1)
+		{
+			ParameterCollection checkParams = new ParameterCollection();
+			checkParams.Add("EventId",params.Get("EventId"));
+			checkParams.Add("AcceptAll",0);
+			Object check = ExecuteSPCheck("CheckForAcceptUser",checkParams);
+			if(check!=null && !check.toString().equals(""))
+			{
+				ErrorMessage = check.toString();
+				return false;
+			}
+		}
 		whereParams.Add("eventId", EventId);
 		whereParams.Add("userId", UserId);
 		updateParams.Add("RequestStatusId", RequestStatusId);
 		updateParams.Add("UpdateDate", business.GetNow());
 		new HibernateOperation().UpdateComposite("Request",updateParams,whereParams);
+		return true;
 	}
 	
-	protected void AcceptRefuseRequests(ParameterCollection params, boolean state)
+	protected boolean AcceptRefuseRequests(ParameterCollection params, boolean state)
 	{
+		if(state)
+		{
+			ParameterCollection checkParams = new ParameterCollection();
+			checkParams.Add("EventId",params.Get("EventId"));
+			checkParams.Add("AcceptAll",1);
+			Object check = ExecuteSPCheck("CheckForAcceptUser",checkParams);
+			if(check!=null && !check.toString().equals(""))
+			{
+				ErrorMessage = check.toString();
+				return false;
+			}
+		}
 		ParameterCollection whereParams = new ParameterCollection();
 		ParameterCollection whereParamsTable = new ParameterCollection();
 		ParameterCollection updateParams = new ParameterCollection();
@@ -221,6 +250,7 @@ public class RequestServlet extends ServletCommunication {
 		updateParams.Add("RequestStatusId", RequestStatusId);
 		updateParams.Add("UpdateDate", business.GetNow());
 		new HibernateOperation().UpdateComposite("Request",updateParams,whereParams,whereParamsTable);
+		return true;
 	}
 
 }
