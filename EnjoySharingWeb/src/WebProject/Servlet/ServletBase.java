@@ -13,6 +13,7 @@ import com.google.gson.JsonObject;
 import Hibernate.HibernateOperation;
 import Hibernate.DataObjectClass.DataTable;
 import Hibernate.DataObjectClass.StandardResult;
+import Hibernate.Tables.Loginfo;
 import WebProject.Business.BusinessBase;
 import WebProject.Business.BusinessDB;
 import WebProject.DataObject.ParameterCollection;
@@ -27,6 +28,7 @@ public class ServletBase extends HttpServlet {
 	protected BusinessBase business;
 	protected BusinessDB businessDB;
 	protected User currentUser;
+	protected String servletName;
 	protected JsonObject jsonReturn = null;
 	protected String returnMessage = null;
 	protected boolean stateResponse = true;
@@ -163,16 +165,14 @@ public class ServletBase extends HttpServlet {
 		jsonReturn.addProperty(name, value);
 	}
 	
-	protected void ReturnJson() throws IOException
+	protected void ReturnJson() throws IOException { }
+	
+	protected void LogInfo()
 	{
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		jsonReturn = new JsonObject();
-		addJsonBoolean("stateResponse",stateResponse);
-		addJsonString("message",returnMessage);
-		response.getWriter().write(jsonReturn.toString());
-//		System.out.println("risposta a "+currentUser.getUsername());
-//		System.out.println(jsonReturn.toString());
+		if(currentUser.getUserId() == null) return;
+		String strRequestParams = business.CreateJSONObject(requestParams);
+		Loginfo li = new Loginfo(currentUser.getUserId(), servletName, strRequestParams, jsonReturn.toString(), business.GetNow());
+		new HibernateOperation().Save(li);
 	}
 
 }

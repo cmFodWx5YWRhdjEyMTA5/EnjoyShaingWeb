@@ -7,8 +7,8 @@
     	<property name="hibernate.bytecode.use_reflection_optimizer">false</property>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/enjoysharingdb?autoReconnection=true</property>
-        <property name="hibernate.connection.username">username</property>
-        <property name="hibernate.connection.password">password</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">$sql2019</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="hbm2dll.auto">update</property>
         
@@ -20,5 +20,6 @@
         <mapping resource="Hibernate/Tables/Usertofriend.hbm.xml" />
         <mapping resource="Hibernate/Tables/Event.hbm.xml" />
         <mapping resource="Hibernate/Tables/Request.hbm.xml" />
+        <mapping resource="Hibernate/Tables/Loginfo.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

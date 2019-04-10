@@ -21,6 +21,7 @@ public class UserServlet extends ServletCommunication {
        
     public UserServlet() {
         super();
+		super.servletName = "UserServlet";
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

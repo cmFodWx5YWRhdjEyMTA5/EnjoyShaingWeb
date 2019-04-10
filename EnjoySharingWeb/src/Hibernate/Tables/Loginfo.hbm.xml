@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 10-apr-2019 21.15.19 by Hibernate Tools 5.2.3.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class catalog="enjoysharingdb" dynamic-insert="false" dynamic-update="false" mutable="true" name="Hibernate.Tables.Loginfo" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="loginfo">
+        <id name="logInfoId" type="java.lang.Long">
+            <column name="LogInfoId"/>
+            <generator class="identity"/>
+        </id>
+        <property generated="never" lazy="false" name="userId" optimistic-lock="true" type="java.lang.Long" unique="false">
+            <column name="UserId"/>
+        </property>
+        <property generated="never" lazy="false" name="servletName" optimistic-lock="true" type="string" unique="false">
+            <column length="1000" name="ServletName" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="request" optimistic-lock="true" type="string" unique="false">
+            <column length="4000" name="Request" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="response" optimistic-lock="true" type="string" unique="false">
+            <column length="4000" name="Response" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="logDate" optimistic-lock="true" type="timestamp" unique="false">
+            <column length="0" name="LogDate" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>

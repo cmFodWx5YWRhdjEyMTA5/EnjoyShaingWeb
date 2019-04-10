@@ -19,6 +19,7 @@ public class EventServlet extends ServletCommunication {
        
     public EventServlet() {
         super();
+		super.servletName = "EventServlet";
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

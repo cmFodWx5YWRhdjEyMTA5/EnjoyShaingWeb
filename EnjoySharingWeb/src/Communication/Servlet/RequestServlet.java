@@ -22,6 +22,7 @@ public class RequestServlet extends ServletCommunication {
        
     public RequestServlet() {
         super();
+		super.servletName = "RequestServlet";
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

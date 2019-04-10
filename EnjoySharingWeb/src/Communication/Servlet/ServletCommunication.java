@@ -5,6 +5,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.gson.JsonObject;
 import Hibernate.DataObjectClass.DataTable;
 import WebProject.Custom.AuthenticationException;
 import WebProject.DataObject.ParameterCollection;
@@ -48,8 +49,8 @@ public class ServletCommunication extends ServletBase {
 				throw new ServletException();
 			}
 			requestType = GetRequestParameter("RequestType");
-			System.out.println("Richiesta di GET da "+currentUser.getUsername());
-			System.out.println("RequestType "+requestType);
+			//System.out.println("Richiesta di GET da "+currentUser.getUsername());
+			//System.out.println("RequestType "+requestType);
 		} 
 		catch (AuthenticationException e)
 		{
@@ -73,8 +74,8 @@ public class ServletCommunication extends ServletBase {
 				throw new ServletException();
 			}
 			requestType = GetRequestParameter("RequestType");
-			System.out.println("Richiesta di POST da "+currentUser.getUsername());
-			System.out.println("RequestType "+requestType);
+			//System.out.println("Richiesta di POST da "+currentUser.getUsername());
+			//System.out.println("RequestType "+requestType);
 		} 
 		catch (AuthenticationException e)
 		{
@@ -124,6 +125,20 @@ public class ServletCommunication extends ServletBase {
 	{
 		stateResponse = false;
 		returnMessage = ErrorMessage;
+	}
+	
+	@Override
+	protected void ReturnJson() throws IOException
+	{
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		jsonReturn = new JsonObject();
+		addJsonBoolean("stateResponse",stateResponse);
+		addJsonString("message",returnMessage);
+		LogInfo();
+		response.getWriter().write(jsonReturn.toString());
+//		System.out.println("risposta a "+currentUser.getUsername());
+//		System.out.println(jsonReturn.toString());
 	}
 
 }
