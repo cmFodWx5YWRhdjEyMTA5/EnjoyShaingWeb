@@ -29,7 +29,6 @@ public class HibernateOperation {
 		{
 			session.beginTransaction();
 			retList = session.createQuery(query).list();
-			session.flush();
 		}
 		catch(Exception e)
 		{
@@ -39,6 +38,7 @@ public class HibernateOperation {
 		{
 			if(!session.getTransaction().wasCommitted())
 				session.getTransaction().commit();
+			session.flush();
 		}
 		return retList;
 	}
@@ -66,7 +66,6 @@ public class HibernateOperation {
 				}
 			}
 			retList = q.list();
-			session.flush();
 		}
 		catch(Exception e)
 		{
@@ -77,6 +76,7 @@ public class HibernateOperation {
 		{
 			if(!session.getTransaction().wasCommitted())
 				session.getTransaction().commit();
+			session.flush();
 		}
 		return retList;
 	}
@@ -110,7 +110,6 @@ public class HibernateOperation {
 				}
 			}
 			retList = q.setResultTransformer(Transformers.aliasToBean(resultClass)).list();
-			session.flush();
 		}
 		catch(Exception e)
 		{
@@ -121,6 +120,7 @@ public class HibernateOperation {
 		{
 			if(!session.getTransaction().wasCommitted())
 				session.getTransaction().commit();
+			session.flush();
 		}
 		return retList;
 	}
@@ -323,17 +323,18 @@ public class HibernateOperation {
 		{
 			session.beginTransaction();
 			session.save(o);
-			session.flush();
 		}
 		catch(Exception e)
 		{
 			ret = false;
-			
 		}
 		finally
 		{
-			if(!session.getTransaction().wasCommitted())
+			if(ret && !session.getTransaction().wasCommitted())
+			{
 				session.getTransaction().commit();
+				session.flush();
+			}
 		}
         return ret;
 	}
@@ -353,7 +354,6 @@ public class HibernateOperation {
 				for(Object o : list)
 				{
 					session.delete(o);
-					session.flush();
 				}
 			}
 			//System.out.println("BaseDBOperations.Update nessun oggetto da uploadare");
@@ -367,6 +367,7 @@ public class HibernateOperation {
 		{
 			if(!session.getTransaction().wasCommitted())
 				session.getTransaction().commit();
+			session.flush();
 		}
         return ret;
 	}
@@ -422,7 +423,6 @@ public class HibernateOperation {
 			queryRet = q.executeUpdate();
 			if(queryRet>0)
 				ret = true;
-			session.flush();
 		}
 		catch(Exception e)
 		{
@@ -432,6 +432,7 @@ public class HibernateOperation {
 		{
 			if(!session.getTransaction().wasCommitted())
 				session.getTransaction().commit();
+			session.flush();
 		}
 		return ret;
 	}
@@ -446,7 +447,6 @@ public class HibernateOperation {
 			queryRet = session.createQuery(query).executeUpdate();
 			if(queryRet>0)
 				ret = true;
-			session.flush();
 		}
 		catch(Exception e)
 		{
@@ -456,6 +456,7 @@ public class HibernateOperation {
 		{
 			if(!session.getTransaction().wasCommitted())
 				session.getTransaction().commit();
+			session.flush();
 		}
 		return ret;
 	}
@@ -482,7 +483,6 @@ public class HibernateOperation {
 					ret = true;
 					o = SetUpdateFieldsFromParameters(o, params);
 					session.update(o);
-					session.flush();
 				}
 			}
 			//System.out.println("BaseDBOperations.Update nessun oggetto da uploadare");
@@ -496,6 +496,7 @@ public class HibernateOperation {
 		{
 			if(!session.getTransaction().wasCommitted())
 				session.getTransaction().commit();
+			session.flush();
 		}
         return ret;
 	}
@@ -517,7 +518,6 @@ public class HibernateOperation {
 					ret = true;
 					o = SetUpdateFieldsFromParameters(o, params);
 					session.update(o);
-					session.flush();
 				}
 			}
 			//System.out.println("BaseDBOperations.Update nessun oggetto da uploadare");
@@ -531,6 +531,7 @@ public class HibernateOperation {
 		{
 			if(!session.getTransaction().wasCommitted())
 				session.getTransaction().commit();
+			session.flush();
 		}
         return ret;
 	}
@@ -552,7 +553,6 @@ public class HibernateOperation {
 					ret = true;
 					o = SetUpdateFieldsFromParameters(o, params);
 					session.update(o);
-					session.flush();
 				}
 			}
 			//System.out.println("BaseDBOperations.Update nessun oggetto da uploadare");
@@ -566,6 +566,7 @@ public class HibernateOperation {
 		{
 			if(!session.getTransaction().wasCommitted())
 				session.getTransaction().commit();
+			session.flush();
 		}
         return ret;
 	}
